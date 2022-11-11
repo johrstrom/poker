@@ -1,34 +1,52 @@
 class PokerHand
 
+  class << self
+    def flush(cards)
+      cards.group_by(&:suit).map do |_suit, suited_cards|
+        return suited_cards.sort_by(&:rank) if suited_cards.size >= 5
+      end
+
+      nil
+    end
+
+    def straight(cards)
+      sorted = cards.sort_by(&:rank).reverse
+      running = true
+
+      sorted.each_cons(2).with_index do |couple, idx|
+        difference = couple.first.rank - couple.second.rank
+        running = false unless difference == 1 && idx <= 5
+
+        break unless running
+      end
+
+      running ? sorted : nil
+    end
+  end
+
   attr_reader :cards, :flush_cards, :straight_cards
 
   def initialize
     @cards = []
   end
 
-  def flush?
-    @flush_clards ||= cards.group_by do |c| 
-      c.suit
-    end.map do |suit, cards|
-      if cards.size >= 5
-        @flush_suit = suit
-        cards.sort_by(&:c.rank)
-      end
-    end.compact.first
+  def <<(card)
+    @cards << card if card.is_a?(Card)
+  end
 
-    !@flush_cards.nil?
+  def best5(community_cards)
+    all_seven = @cards + community_cards
+    # four of a kind
+    # full house
+    # flush
+    # straight
+    # three of a kind
+    # two of a kind
+    # sorted by rank
   end
 
   def flush_high
     flush.first.rank if flush?
-  end
-
-  def straight?
-    cards.sort_by(&:c.rank).inject(false) do |straight, cards|
-      cards.each_cons(5) do |straight_cards|
-        
-      end
-    end
   end
 
   def straight_high

@@ -10,22 +10,24 @@ class Card
   SUITS = [
     SPADE, HEART, CLUB, DIAMOND 
   ].freeze
-  
-  RANKS = {
-    ace: 14,
-    king: 13,
-    queen: 12,
-    jack: 11,
-    ten: 10,
-    nine: 9,
-    eight: 8,
-    seven: 7,
-    six: 6,
-    five: 5,
-    four: 4,
-    three: 3,
-    two: 2
-  }.freeze
+
+  ACE =  14
+  KING = 13
+  QUEEN = 12
+  JACK = 11
+  TEN = 10
+  NINE = 9
+  EIGHT = 8
+  SEVEN = 7
+  SIX = 6
+  FIVE = 5
+  FOUR = 4
+  THREE = 3
+  TWO = 2
+
+  RANKS = [
+    ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO,
+  ].freeze
 
   class << self
     def deck
@@ -53,12 +55,9 @@ class Card
   end
 
   def rank_name
-    rank[0]
+    rank
   end
 
-  def value
-    rank[1]
-  end
 
   def spade?
     suit == SPADE
@@ -77,6 +76,6 @@ class Card
   end
 
   def to_s
-    "#{rank[0]} of #{suit}s"
+    "#{rank_name} of #{suit}s"
   end
 end
