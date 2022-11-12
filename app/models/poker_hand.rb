@@ -22,6 +22,31 @@ class PokerHand
 
       running ? sorted : nil
     end
+
+    def full_house(cards)
+      three_kind = nil
+      pair = nil
+
+      cards.group_by(&:rank).each do |_rank, group|
+        case group.size
+        when 3
+          three_kind = group
+        when 2
+          pair = group
+        end
+      end
+
+      if three_kind && pair
+        hand = three_kind + pair
+        extra = cards - hand
+
+        hand + extra
+      end
+    end
+
+    def multiple_of_a_kind(cards)
+    end
+
   end
 
   attr_reader :cards, :flush_cards, :straight_cards
