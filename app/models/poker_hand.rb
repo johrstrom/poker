@@ -45,8 +45,13 @@ class PokerHand
     end
 
     def multiple_of_a_kind(cards)
+      groups = cards.group_by(&:rank)
+      if groups.size == 7
+        nil
+      else
+        cards.sort_by(&:rank).reverse
+      end
     end
-
   end
 
   attr_reader :cards, :flush_cards, :straight_cards
