@@ -1,7 +1,8 @@
-# README
+# Ruby Poker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a Ruby on Rails poker app that I work on from time to time.
+It's just something I'm doing for kicks, so there won't be much
+documentation or indeed much functionality.  Good luck!
 
 Things you may want to cover:
 
