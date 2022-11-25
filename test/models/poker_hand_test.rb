@@ -49,7 +49,7 @@ class PokerHandTest < ActiveSupport::TestCase
     hand[3..4].each { |c| assert_equal(Card::ACE, c.rank) }
   end
 
-  test 'two of a kind' do
+  test 'two of a kind returns sorted hand when true' do
     cards = [
       Card.new(suit: Card::HEART, rank: Card::ACE),
       Card.new(suit: Card::DIAMOND, rank: Card::ACE),
@@ -60,10 +60,41 @@ class PokerHandTest < ActiveSupport::TestCase
       Card.new(suit: Card::CLUB, rank: Card::SEVEN),
     ]
 
-    hand = PokerHand.multiple_of_a_kind(cards.shuffle)
+    hand = PokerHand.two_of_a_kind(cards.shuffle)
     assert_not_nil(hand)
     hand[0..1].each { |c| assert_equal(Card::ACE, c.rank) }
     assert_equal(hand[2].rank, Card::KING)
   end
 
+  test 'two of a kind returns nil when false' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::FOUR),
+      Card.new(suit: Card::DIAMOND, rank: Card::ACE),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::KING),
+      Card.new(suit: Card::SPADE, rank: Card::TWO),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.two_of_a_kind(cards.shuffle)
+    assert_nil(hand)
+  end
+
+  test 'two of a kind with higher kicker' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::ACE),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::KING),
+      Card.new(suit: Card::SPADE, rank: Card::TWO),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.two_of_a_kind(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..1].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(hand[2].rank, Card::ACE)
+  end
 end

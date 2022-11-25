@@ -73,6 +73,15 @@ class PokerHand
     end
 
     def two_of_a_kind(cards)
+      groups = cards.group_by(&:rank).sort_by { |arr| arr.second.size }.reverse
+
+      if groups.first.second.size == 2
+        cards = groups.map(&:second).flatten
+        pair = cards[0], cards[1]
+        others = cards.reject { |c| pair.include?(c) }.sort_by(&:rank).reverse
+
+        pair + others
+      end
     end
 
     def two_pair(cards)
