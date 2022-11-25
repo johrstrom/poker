@@ -70,6 +70,7 @@ class PokerHand
     end
 
     def three_of_a_kind(cards)
+      n_of_a_kind(cards, 3)
     end
 
     def two_of_a_kind(cards)

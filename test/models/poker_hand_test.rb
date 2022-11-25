@@ -97,4 +97,36 @@ class PokerHandTest < ActiveSupport::TestCase
     hand[0..1].each { |c| assert_equal(Card::QUEEN, c.rank) }
     assert_equal(hand[2].rank, Card::ACE)
   end
+
+  test 'three of a kind with higher kicker' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::ACE),
+      Card.new(suit: Card::SPADE, rank: Card::TWO),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.three_of_a_kind(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..2].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(hand[3].rank, Card::ACE)
+  end
+
+  test 'three of a kind returns nil when false' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::KING),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::ACE),
+      Card.new(suit: Card::SPADE, rank: Card::TWO),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.three_of_a_kind(cards.shuffle)
+    assert_nil(hand)
+  end
 end
