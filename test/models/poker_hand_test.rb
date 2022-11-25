@@ -129,4 +129,54 @@ class PokerHandTest < ActiveSupport::TestCase
     hand = PokerHand.three_of_a_kind(cards.shuffle)
     assert_nil(hand)
   end
+
+  test 'four of a kind with higher kicker' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::ACE),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.four_of_a_kind(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..3].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(hand[4].rank, Card::ACE)
+  end
+
+  test 'four of a kind with lower kicker' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::JACK),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.four_of_a_kind(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..3].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(hand[4].rank, Card::JACK)
+  end
+
+
+  test 'four of a kind returns nil when false' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::QUEEN),
+      Card.new(suit: Card::CLUB, rank: Card::KING),
+      Card.new(suit: Card::SPADE, rank: Card::JACK),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.four_of_a_kind(cards.shuffle)
+    assert_nil(hand)
+  end
 end

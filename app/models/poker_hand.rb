@@ -59,14 +59,7 @@ class PokerHand
     end
 
     def four_of_a_kind(cards)
-      groups = cards.group_by(&:rank)
-      if groups.size == cards.size
-        nil
-      elsif groups.first.size == 4
-        cards.sort_by(&:rank).reverse
-      else
-        nil
-      end
+      n_of_a_kind(cards, 4)
     end
 
     def three_of_a_kind(cards)
