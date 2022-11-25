@@ -1,5 +1,15 @@
 class PokerHand
 
+  FOUR_OF_A_KIND = 1
+  STRAIGHT_FLUSH = 2
+  FULL_HOUSE = 3
+  FLUSH = 4
+  STRAIGHT = 5
+  THREE_OF_A_KIND = 6
+  TWO_PAIR = 7
+  PAIR = 8
+  HIGHEST_CARD = 9
+
   class << self
     def flush(cards)
       cards.group_by(&:suit).map do |_suit, suited_cards|
@@ -23,6 +33,10 @@ class PokerHand
       running ? sorted : nil
     end
 
+    def straight_flush(cards)
+      straight(cards) ? flush(cards) : nil
+    end
+
     def full_house(cards)
       three_kind = nil
       pair = nil
@@ -44,17 +58,28 @@ class PokerHand
       end
     end
 
-    def multiple_of_a_kind(cards)
+    def four_of_a_kind(cards)
       groups = cards.group_by(&:rank)
-      if groups.size == 7
+      if groups.size == cards.size
         nil
-      else
+      elsif groups.first.size == 4
         cards.sort_by(&:rank).reverse
+      else
+        nil
       end
+    end
+
+    def three_of_a_kind(cards)
+    end
+
+    def two_of_a_kind(cards)
+    end
+
+    def two_pair(cards)
     end
   end
 
-  attr_reader :cards, :flush_cards, :straight_cards
+  attr_reader :cards
 
   def initialize
     @cards = []
@@ -64,8 +89,35 @@ class PokerHand
     @cards << card if card.is_a?(Card)
   end
 
-  def best5(community_cards)
+  def hand(community_cards)
     all_seven = @cards + community_cards
+    hand = PokerHand.full_house(all_seven)
+    if hand
+      @hand = PokerHand::FULL_HOUSE
+    end
+
+    hand = PokerHand.straight_flush(all_seven)
+    if hand
+      @hand = PokerHand::STRAIGHT_FLUSH
+    end
+
+    hand = PokerHand.flush(all_seven)
+    if hand
+      @hand = PokerHand::FLUSH
+    end
+
+    hand = PokerHand.straight(all_seven)
+    if hand
+      @hand = PokerHand::STRAIGHT
+    end
+
+    hand = PokerHand.three_of_a_kind(cards)
+    if hand
+      @hand = PokerHand::THREE_OF_A_KIND
+    end
+
+    # hand = PokerHand.multiple_of_a_kind(all_seven)
+
     # four of a kind
     # full house
     # flush
@@ -73,6 +125,12 @@ class PokerHand
     # three of a kind
     # two of a kind
     # sorted by rank
+  end
+
+  def ==(other)
+  end
+
+  def >=(other)
   end
 
   def flush_high
