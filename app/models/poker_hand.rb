@@ -83,6 +83,23 @@ class PokerHand
     end
 
     def two_pair(cards)
+      first_pair = n_of_a_kind(cards, 2)
+      first_pair = first_pair[0..1] if first_pair
+
+      if first_pair
+        rest = cards - first_pair
+        second_pair = n_of_a_kind(rest, 2)
+        second_pair = second_pair[0..1] if second_pair
+
+        if second_pair
+          rest = (cards - first_pair - second_pair).sort_by(&:rank).reverse
+          if first_pair.first.rank > second_pair.first.rank
+            first_pair + second_pair + rest
+          else
+            second_pair + first_pair + rest
+          end
+        end
+      end
     end
   end
 
@@ -98,6 +115,12 @@ class PokerHand
 
   def hand(community_cards)
     all_seven = @cards + community_cards
+
+    hand = PokerHand.four_of_a_kind(all_seven)
+    if hand
+      @hand = PokerHand::FOUR_OF_A_KIND
+    end
+
     hand = PokerHand.full_house(all_seven)
     if hand
       @hand = PokerHand::FULL_HOUSE
@@ -123,15 +146,12 @@ class PokerHand
       @hand = PokerHand::THREE_OF_A_KIND
     end
 
-    # hand = PokerHand.multiple_of_a_kind(all_seven)
+    hand = PokerHand.two_of_a_kind(cards)
+    if hand
+      @hand = PokerHand::TWO_OF_A_KIND
+    end
 
-    # four of a kind
-    # full house
-    # flush
-    # straight
-    # three of a kind
-    # two of a kind
-    # sorted by rank
+    @hand = PokerHand::HIGHEST_CARD
   end
 
   def ==(other)

@@ -179,4 +179,73 @@ class PokerHandTest < ActiveSupport::TestCase
     hand = PokerHand.four_of_a_kind(cards.shuffle)
     assert_nil(hand)
   end
+
+  test 'two pair with higher kicker' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::KING),
+      Card.new(suit: Card::CLUB, rank: Card::KING),
+      Card.new(suit: Card::SPADE, rank: Card::ACE),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.two_pair(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..1].each { |c| assert_equal(Card::KING, c.rank) }
+    hand[2..3].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(Card::ACE, hand[4].rank)
+  end
+
+  test 'two pair with lower kicker' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::KING),
+      Card.new(suit: Card::CLUB, rank: Card::KING),
+      Card.new(suit: Card::SPADE, rank: Card::JACK),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.two_pair(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..1].each { |c| assert_equal(Card::KING, c.rank) }
+    hand[2..3].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(Card::JACK, hand[4].rank)
+  end
+
+  test 'two pair with kicker in between' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::ACE),
+      Card.new(suit: Card::CLUB, rank: Card::ACE),
+      Card.new(suit: Card::SPADE, rank: Card::KING),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.two_pair(cards.shuffle)
+    assert_not_nil(hand)
+    hand[0..1].each { |c| assert_equal(Card::ACE, c.rank) }
+    hand[2..3].each { |c| assert_equal(Card::QUEEN, c.rank) }
+    assert_equal(Card::KING, hand[4].rank)
+  end
+
+  test 'two pair returns nil when false' do
+    cards = [
+      Card.new(suit: Card::HEART, rank: Card::QUEEN),
+      Card.new(suit: Card::DIAMOND, rank: Card::QUEEN),
+      Card.new(suit: Card::SPADE, rank: Card::KING),
+      Card.new(suit: Card::CLUB, rank: Card::FOUR),
+      Card.new(suit: Card::SPADE, rank: Card::ACE),
+      Card.new(suit: Card::CLUB, rank: Card::FIVE),
+      Card.new(suit: Card::CLUB, rank: Card::SEVEN),
+    ]
+
+    hand = PokerHand.two_pair(cards.shuffle)
+    assert_nil(hand)
+  end
 end
