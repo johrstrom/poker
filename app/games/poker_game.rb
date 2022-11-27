@@ -20,7 +20,7 @@ class PokderGame
   def flop!
     @flop = []
     burn!
-    (1...3).each do |card| 
+    (1...3).each do |card|
       @flop << card
     end
   end
