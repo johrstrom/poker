@@ -1,4 +1,4 @@
-class PokderGame
+class PokerGame
 
   attr_reader :players, :deck, :flop, :turn, :river
 
