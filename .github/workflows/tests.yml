@@ -24,5 +24,8 @@ jobs:
           bundler: "2.3"
           bundler-cache: true
 
+      - name: Run Zeitwerk check
+        run: bin/rails zeitwerk:check
+
       - name: Run Unit Tests
         run: bin/rails test
