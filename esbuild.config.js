@@ -23,5 +23,6 @@ esbuild.build({
   outdir: 'app/assets/builds',
   external: ['fs'],
   minify: process.env.RAILS_ENV == 'production' ? true : false,
+  watch: process.argv.includes('--watch'),
 }).catch((e) => console.error(e.message));
 
