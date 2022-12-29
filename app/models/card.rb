@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class Card
-
   SPADE = :spade
   HEART = :heart
   CLUB = :club
   DIAMOND = :diamond
 
   SUITS = [
-    SPADE, HEART, CLUB, DIAMOND 
+    SPADE, HEART, CLUB, DIAMOND
   ].freeze
 
   ACE =  14
@@ -26,7 +25,7 @@ class Card
   TWO = 2
 
   RANKS = [
-    ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO,
+    ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO
   ].freeze
 
   class << self
@@ -43,6 +42,14 @@ class Card
     def shuffled_deck
       deck.shuffle!
     end
+
+    def rank_lookup
+      @rank_lookup ||= Hash.new do |hash, key|
+        name = Card.constants.find { |k| Card.const_get(k) == key }
+
+        hash[key] = name.to_s.downcase
+      end
+    end
   end
 
   # rank is a 2d vector like [:ace, 14]
@@ -55,9 +62,8 @@ class Card
   end
 
   def rank_name
-    rank
+    Card.rank_lookup[rank]
   end
-
 
   def spade?
     suit == SPADE
@@ -77,5 +83,9 @@ class Card
 
   def to_s
     "#{rank_name} of #{suit}s"
+  end
+
+  def asset_path
+    "cards/#{to_s.gsub(' ', '_')}.svg"
   end
 end

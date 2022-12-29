@@ -1,0 +1,9 @@
+<%- 
+  card = Card.new(suit: Card::SPADE, rank: Card::ACE)
+-%>
+<div id="card_table" class="card_table">
+
+  <div class="row">
+    <%= render 'games/card', locals: { card: card } %>
+  </div>
+</div>
