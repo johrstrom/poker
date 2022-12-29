@@ -1,9 +1,17 @@
 <%- 
-  card = Card.new(suit: Card::SPADE, rank: Card::ACE)
+  card1 = Card.new(suit: Card::SPADE, rank: Card::ACE)
+  card2 = Card.new(suit: Card::HEART, rank: Card::ACE)
 -%>
 <div id="card_table" class="card_table">
 
   <div class="row">
-    <%= render 'games/card', locals: { card: card } %>
+
+  </div>
+
+  <div class="row user_row">
+    <div class="d-flex justify-content-center">
+      <%= render 'games/card', locals: { card: card1 } %>
+      <%= render 'games/card', locals: { card: card2 } %>
+    </div>
   </div>
 </div>
